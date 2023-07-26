@@ -104,6 +104,19 @@ namespace UN
         }
     };
 
+    inline bool operator>(const UUID& lhs, const UUID& rhs)
+    {
+        auto* l = reinterpret_cast<const UInt64*>(lhs.Data.data());
+        auto* r = reinterpret_cast<const UInt64*>(rhs.Data.data());
+
+        if (l[0] != r[0])
+        {
+            return l[0] > r[0];
+        }
+
+        return l[1] > r[1];
+    }
+
     inline bool operator<(const UUID& lhs, const UUID& rhs)
     {
         auto* l = reinterpret_cast<const UInt64*>(lhs.Data.data());
