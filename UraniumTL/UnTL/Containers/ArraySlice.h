@@ -21,6 +21,9 @@ namespace UN
         using AddConst = std::conditional_t<std::is_const_v<T>, const TCont, TCont>;
 
         using StdVector = AddConst<std::vector<std::remove_const_t<T>>>;
+
+        using ListType = AddConst<List<std::remove_const_t<T>>>;
+
         template<USize N>
         using StdArray = AddConst<std::array<std::remove_const_t<T>, N>>;
 
@@ -80,10 +83,10 @@ namespace UN
         {
         }
 
-        //! \brief Create from a List<T>.
+        //! \brief Create an array slice.
         //!
-        //! \param [in] list - The list.
-        inline ArraySlice(const List<T>& list) // NOLINT
+        //! \param list - The list to create the slice from.
+        inline ArraySlice(ListType& list) // NOLINT
             : m_pBegin(list.Data())
             , m_pEnd(list.Data() + list.Size())
         {
