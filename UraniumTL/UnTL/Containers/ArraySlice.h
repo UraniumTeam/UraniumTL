@@ -79,6 +79,15 @@ namespace UN
         {
         }
 
+        //! \brief Create from a List<T>.
+        //!
+        //! \param [in] list - The list.
+        inline ArraySlice(const List<T>& list) // NOLINT
+            : m_pBegin(list.Data())
+            , m_pEnd(list.Data() + list.Size())
+        {
+        }
+
         //! \brief Create an array slice.
         //!
         //! \param lst - The initializer list to create the slice from.
