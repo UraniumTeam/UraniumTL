@@ -574,4 +574,14 @@ namespace std
     {
         return stream << std::string_view(str.Data(), str.Size());
     }
+
+    template<>
+    struct hash<UN::StringSlice>
+    {
+        inline size_t operator()(const UN::StringSlice& str) const noexcept
+        {
+            std::hash<std::string_view> hasher;
+            return hasher(std::string_view(str.Data(), str.Size()));
+        }
+    };
 } // namespace std

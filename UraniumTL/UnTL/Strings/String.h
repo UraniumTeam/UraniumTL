@@ -655,3 +655,16 @@ namespace UN
         }
     };
 } // namespace UN
+
+namespace std
+{
+    template<>
+    struct hash<UN::String>
+    {
+        inline size_t operator()(const UN::String& str) const noexcept
+        {
+            std::hash<std::string_view> hasher;
+            return hasher(std::string_view(str.Data(), str.Size()));
+        }
+    };
+} // namespace std
