@@ -4,6 +4,9 @@ set(SRC
     UnTL/Base/Platform.h
     UnTL/Base/PlatformTraits.h
 
+    UnTL/Buffers/ArrayPool.h
+
+    UnTL/Containers/HeapArray.h
     UnTL/Containers/List.h
     UnTL/Containers/ArraySlice.h
 

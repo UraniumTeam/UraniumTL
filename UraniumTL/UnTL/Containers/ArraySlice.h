@@ -129,7 +129,7 @@ namespace UN
         //! \param value - The value to look for.
         //!
         //! \return The index of the value or -1.
-        [[nodiscard]] inline SSize IndexOf(const T& value) const noexcept
+        [[nodiscard]] inline SSize FindFirstOf(const T& value) const noexcept
         {
             auto length = static_cast<SSize>(Length());
             for (SSize i = 0; i < length; ++i)
@@ -148,7 +148,7 @@ namespace UN
         //! \param value - The value to look for.
         //!
         //! \return The index of the value or -1.
-        [[nodiscard]] inline SSize LastIndexOf(const T& value) const noexcept
+        [[nodiscard]] inline SSize FindLastOf(const T& value) const noexcept
         {
             auto length = static_cast<SSize>(Length());
             for (SSize i = length - 1; i >= 0; --i)
