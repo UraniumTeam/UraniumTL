@@ -196,8 +196,8 @@ namespace UN
 
         //! \brief Assign N copies of X.
         //!
-        //! \param [in] n - The length of data.
-        //! \param [in] x - The element to copy N times.
+        //! \param n - The length of data.
+        //! \param x - The element to copy N times.
         inline void Assign(USize n, const T& x)
         {
             Clear();
@@ -207,7 +207,7 @@ namespace UN
 
         //! \brief Assign data from a std::initializer_list.
         //!
-        //! \param [in] list - The list to assign.
+        //! \param list - The list to assign.
         inline void Assign(std::initializer_list<T> list)
         {
             for (auto& v : list)
@@ -218,8 +218,8 @@ namespace UN
 
         //! \brief Assign data from a C-style array.
         //!
-        //! \param [in] begin - A pointer to the array.
-        //! \param [in] end - A pointer to the element after array that won't be included.
+        //! \param begin - A pointer to the array.
+        //! \param end - A pointer to the element after array that won't be included.
         inline void Assign(const T* begin, const T* end)
         {
             Reserve(end - begin);
@@ -231,7 +231,7 @@ namespace UN
 
         //! \brief Push a new element to the back of the container and move.
         //!
-        //! \param [in] x - The element to push.
+        //! \param x - The element to push.
         //!
         //! \return The reference to the back of the container.
         inline T& Push(T&& x)
@@ -243,7 +243,7 @@ namespace UN
 
         //! \brief Push a new element to the back of the container and copy.
         //!
-        //! \param [in] x - The element to push.
+        //! \param x - The element to push.
         //!
         //! \return The reference to the back of the container.
         inline T& Push(const T& x)
@@ -270,7 +270,7 @@ namespace UN
 
         //! \brief Append a new element to the back of the container and move.
         //!
-        //! \param [in] x - The element to push.
+        //! \param x - The element to push.
         //!
         //! \return The reference to the container.
         inline List& Append(T&& x)
@@ -281,7 +281,7 @@ namespace UN
 
         //! \brief Append a new element to the back of the container and copy.
         //!
-        //! \param [in] x - The element to push.
+        //! \param x - The element to push.
         //!
         //! \return The reference to the container.
         inline List& Append(const T& x)
@@ -292,7 +292,7 @@ namespace UN
 
         //! \brief Append N default constructed elements to the back of the container.
         //!
-        //! \param [in] n - The number of elements to append.
+        //! \param n - The number of elements to append.
         //!
         //! \return The reference to the container.
         inline List& Append(USize n)
@@ -304,8 +304,8 @@ namespace UN
 
         //! \brief Append N copies of the specified element to the back of the container.
         //!
-        //! \param [in] n - The number of elements to append.
-        //! \param [in] x - The element to copy N times.
+        //! \param n - The number of elements to append.
+        //! \param x - The element to copy N times.
         //!
         //! \return The reference to the container.
         inline List& Append(USize n, const T& x)
@@ -317,8 +317,8 @@ namespace UN
 
         //! \brief Append a C-style array to the back of the container.
         //!
-        //! \param [in] n    - The number of elements to append.
-        //! \param [in] data - The data to be appended.
+        //! \param n    - The number of elements to append.
+        //! \param data - The data to be appended.
         //!
         //! \return The reference to the container.
         inline List& Append(USize n, const T* data)
@@ -387,7 +387,7 @@ namespace UN
 
         //! \brief Reserve capacity for N elements. Does nothing if Capacity() >= N.
         //!
-        //! \param [in] n - The capacity to reserve.
+        //! \param n - The capacity to reserve.
         inline void Reserve(USize n)
         {
             if (Capacity() >= n)
@@ -403,7 +403,7 @@ namespace UN
         //! If Size() < n, will construct new elements on the back to fit size.
         //! If Size() > n, Will destruct to fit size.
         //!
-        //! \param [in] n - The new size of the container.
+        //! \param n - The new size of the container.
         inline void Resize(USize n)
         {
             Resize(n, T{});
@@ -414,8 +414,8 @@ namespace UN
         //! If Size() < n, will construct new elements on the back to fit size.
         //! If Size() > n, Will destruct to fit size.
         //!
-        //! \param [in] n - The new size of the container.
-        //! \param [in] x - The element to copy to the new elements (if any were added).
+        //! \param n - The new size of the container.
+        //! \param x - The element to copy to the new elements (if any were added).
         inline void Resize(USize n, const T& x)
         {
             auto size = Size();
@@ -436,7 +436,7 @@ namespace UN
 
         //! \brief Find a value if the container and return its index or -1.
         //!
-        //! \param [in] value - The value to find.
+        //! \param value - The value to find.
         inline SSize IndexOf(const T& value) const
         {
             auto size = static_cast<SSize>(Size());
@@ -453,7 +453,7 @@ namespace UN
 
         //! \brief Check if a value is present in the list.
         //!
-        //! \param [in] value - The value to check for.
+        //! \param value - The value to check for.
         inline bool Contains(const T& value) const
         {
             return IndexOf(value) != -1;
@@ -546,8 +546,8 @@ namespace UN
         //!
         //! \tparam TMember - Type of pointer to member (must implement relational operators).
         //!
-        //! \param [in] member     - Pointer to member to use as sorting key.
-        //! \param [in] descending - True if the List must be sorted in descending order.
+        //! \param member     - Pointer to member to use as sorting key.
+        //! \param descending - True if the List must be sorted in descending order.
         template<class TMember>
         inline void SortByMember(TMember member,
                                  std::enable_if_t<std::is_member_object_pointer_v<TMember>, bool> descending = false)
@@ -593,7 +593,7 @@ namespace UN
         //!
         //! \tparam F - Type of the predicate.
         //!
-        //! \param [in] f - A functor to use as the sorting predicate.
+        //! \param f - A functor to use as the sorting predicate.
         template<class F>
         inline void Sort(F&& f)
         {

@@ -1,7 +1,7 @@
 #pragma once
 #include <UnTL/Base/Base.h>
-#include <UnTL/Strings/Unicode.h>
 #include <UnTL/Strings/String.h>
+#include <UnTL/Strings/Unicode.h>
 #include <array>
 #include <cstdlib>
 #include <ostream>
@@ -13,16 +13,25 @@ namespace UN::Fmt
     using UN::String;
     using UN::StringSlice;
 
+    //! \brief Interface for value formatters.
+    //!
+    //! \note The interface is for internal usage only.
     struct IValueFormatter
     {
+        //! \internal
         virtual void Format(String& buffer, void* value) const = 0;
     };
 
+    //! \brief Base value formatter.
     template<class T>
     struct BasicValueFormatter : IValueFormatter
     {
         virtual void Format(String& buffer, const T& value) const = 0;
 
+        //! \brief Format a specified value.
+        //!
+        //! \param buffer - The buffer to write the formatted text to.
+        //! \param value - The value to format.
         void Format(String& buffer, void* value) const final
         {
             Format(buffer, *reinterpret_cast<T*>(value));
@@ -192,8 +201,8 @@ namespace UN::Fmt
                 }
                 else if (*it == '}')
                 {
-                    UN_Assert(*++it == '}', "must be escaped");
-
+                    ++it;
+                    UN_Assert(*it == '}', "must be escaped");
                     str.Append(StringSlice(begin, it));
                     begin = it;
                     begin++;
@@ -204,6 +213,23 @@ namespace UN::Fmt
         }
     } // namespace Internal
 
+    //! \brief Format a string with arguments.
+    //!
+    //! The function implements python-like string formatting, i.e. every occurrence of '{}'
+    //! is replaced by the corresponding format argument.\n
+    //!
+    //! Example:
+    //! \code{.cpp}
+    //!     auto string = Format("{} + {} = {}", 2, 2, 5); // "2 + 2 = 5"
+    //! \endcode
+    //!
+    //! This function will use an implementation of ValueFormatter<T> to format an argument of type T.
+    //!
+    //! \tparam Args - Types of the format arguments.
+    //!
+    //! \param fmt - The format string.
+    //! \param args - The format arguments.
+    //! \return The formatted string.
     template<class... Args>
     inline String Format(StringSlice fmt, Args&&... args)
     {

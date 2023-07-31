@@ -4,44 +4,50 @@
 
 namespace UN::IO
 {
+    //! \brief Result code of an I/O operation.
     enum class ResultCode
     {
-        Success,
+        Success, //!< Operation succeeded.
 
-        PermissionDenied,
-        NoFileOrDirectory,
-        FileExists,
-        FileTooLarge,
-        FilenameTooLong,
-        NotDirectory,
-        IsDirectory,
-        DirectoryNotEmpty,
-        TooManyOpenFiles,
-        InvalidSeek,
-        IOError,
-        DeadLock,
-        UnknownError,
+        PermissionDenied,  //!< Permission denied.
+        NoFileOrDirectory, //!< No such file or directory.
+        FileExists,        //!< File already exists.
+        FileTooLarge,      //!< File is too large.
+        FilenameTooLong,   //!< Filename is too long.
+        NotDirectory,      //!< Not a directory.
+        IsDirectory,       //!< Is a directory.
+        DirectoryNotEmpty, //!< Directory is not empty.
+        TooManyOpenFiles,  //!< Too many files are open.
+        InvalidSeek,       //!< Invalid seek operation.
+        IOError,           //!< IO error.
+        DeadLock,          //!< Resource deadlock would occur.
+        UnknownError,      //!< Unknown error.
 
-        ReadNotAllowed,
-        WriteNotAllowed,
-        NotSupported,
-        NotOpen
+        ReadNotAllowed,  //!< Read operation is not allowed.
+        WriteNotAllowed, //!< Write operation is not allowed.
+        NotSupported,    //!< Operation is not supported.
+        NotOpen          //!< File ot stream is not open.
     };
 
+    //! \brief Get result code description.
     StringSlice GetResultDesc(ResultCode code);
 
+    //! \brief File or stream open mode.
     enum class OpenMode
     {
-        None,
-        ReadOnly,
-        WriteOnly,
-        Append,
-        Create,
-        CreateNew,
-        Truncate,
-        ReadWrite
+        None,      //!< None mode.
+        ReadOnly,  //!< Read only open mode.
+        WriteOnly, //!< Write only open mode.
+        Append,    //!< Append open mode.
+        Create,    //!< Create (new or rewrite existing) open mode.
+        CreateNew, //!< Create (new only) open mode.
+        Truncate,  //!< Truncate open mode.
+        ReadWrite  //!< Read and write open mode.
     };
 
+    //! \brief Check if writing is allowed with the specified open mode.
+    //!
+    //! \param mode - The open mode to check.
     inline bool IsWriteAllowed(OpenMode mode)
     {
         switch (mode)
@@ -58,6 +64,9 @@ namespace UN::IO
         }
     }
 
+    //! \brief Check if reading is allowed with the specified open mode.
+    //!
+    //! \param mode - The open mode to check.
     inline bool IsReadAllowed(OpenMode mode)
     {
         switch (mode)
@@ -70,10 +79,11 @@ namespace UN::IO
         }
     }
 
+    //! \brief Seek mode.
     enum class SeekMode
     {
-        Begin,
-        End,
-        Current
+        Begin,  //!< Begin seek mode.
+        End,    //!< End seek mode.
+        Current //!< Current seek mode.
     };
 } // namespace UN::IO

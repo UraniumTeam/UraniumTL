@@ -7,7 +7,7 @@ namespace UN::IO
         switch (code)
         {
         case ResultCode::Success:
-            return "Success";
+            return "Operation succeeded";
         case ResultCode::PermissionDenied:
             return "Permission denied";
         case ResultCode::NoFileOrDirectory:

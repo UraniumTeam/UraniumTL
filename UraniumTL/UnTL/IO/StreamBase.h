@@ -3,6 +3,9 @@
 
 namespace UN::IO
 {
+    //! \brief Base implementation of IStream interface.
+    //!
+    //! This class adds default implementation for the WriteFromStream function.
     class StreamBase : public Object<IStream>
     {
     public:
@@ -38,6 +41,7 @@ namespace UN::IO
         }
     };
 
+    //! \brief Base implementation for read-only streams.
     class RStreamBase : public StreamBase
     {
     public:
@@ -73,6 +77,7 @@ namespace UN::IO
         }
     };
 
+    //! \brief Base implementation for write-only streams.
     class WStreamBase : public StreamBase
     {
     public:

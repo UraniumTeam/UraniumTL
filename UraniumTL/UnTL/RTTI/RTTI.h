@@ -76,7 +76,7 @@ namespace UN
     //!
     //! \tparam TDstPtr - Type of return value, e.g. `DerivedClass*`, _must_ be a pointer.
     //! \tparam TSrc    - Type of source value, e.g. `BaseClass`, _must not_ be a pointer.
-    //! \param [in] src - The source value.
+    //! \param src - The source value.
     //!
     //! \return The result pointer if destination type was derived from source type, `nullptr` otherwise.
     template<class TDstPtr, class TSrc, std::enable_if_t<std::is_base_of_v<TSrc, std::remove_pointer_t<TDstPtr>>, bool> = true>
@@ -98,7 +98,7 @@ namespace UN
     //!
     //! \tparam TDstPtr - Type of return value, e.g. `DerivedClass*`, _must_ be a pointer.
     //! \tparam TSrc    - Type of source value, e.g. `BaseClass`, _must not_ be a pointer.
-    //! \param [in] src - The source value.
+    //! \param src - The source value.
     //!
     //! \return The result pointer if destination type was derived from source type.
     template<class TDstPtr, class TSrc, std::enable_if_t<std::is_base_of_v<TSrc, std::remove_pointer_t<TDstPtr>>, bool> = true>

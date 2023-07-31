@@ -24,19 +24,23 @@ namespace UN::IO
         //! \brief True if stream is open and ready to use.
         [[nodiscard]] virtual bool IsOpen() const = 0;
 
-        //! \brief Add offset to current stream position.
+        //! \brief Add offset to the current stream position.
         //!
-        //! \param [in] offset   - Offset to add to current position.
-        //! \param [in] seekMode - Seek mode to use.
+        //! \param offset - Offset to add to the current position.
+        //! \param seekMode - The SeekMode to use.
         //!
-        //! \return Success or error code.
+        //! \return An error code if the operation was not successful.
+        //!
+        //! \see ResultCode
         [[nodiscard]] virtual VoidResult<ResultCode> Seek(SSize offset, SeekMode seekMode) = 0;
 
         //! \brief Get current stream position.
         //!
         //! \note This can always return zero for certain streams, e.g. stdio stream.
         //!
-        //! \return Current stream position.
+        //! \return Either the current stream position or an error code.
+        //!
+        //! \see ResultCode
         [[nodiscard]] virtual Result<USize, ResultCode> Tell() const = 0;
 
         //! \brief Get length of the stream.
@@ -44,31 +48,39 @@ namespace UN::IO
         //! This will return length of streams when size is known, e.g. file streams.
         //! Otherwise return value is always zero.
         //!
-        //! \return Length of the stream.
+        //! \return Either the length or an error code.
+        //!
+        //! \see ResultCode
         [[nodiscard]] virtual Result<USize, ResultCode> Length() const = 0;
 
         //! \brief Read contents of stream to a pre-allocated buffer.
         //!
-        //! \param [in] buffer - Pointer to buffer to read to.
-        //! \param [in] size   - Size in bytes of data to read.
+        //! \param buffer - Pointer to buffer to read to.
+        //! \param size - Size in bytes of data to read.
         //!
-        //! \return Number of bytes actually read.
+        //! \return Either the number of bytes actually read or an error code.
+        //!
+        //! \see ResultCode
         [[nodiscard]] virtual Result<USize, ResultCode> ReadToBuffer(void* buffer, USize size) = 0;
 
         //! \brief Write contents of buffer to the stream.
         //!
-        //! \param [in] buffer - Pointer to buffer to write from.
-        //! \param [in] size   - Size in bytes of data to write.
+        //! \param buffer - Pointer to buffer to write from.
+        //! \param size - Size in bytes of data to write.
         //!
-        //! \return Number of bytes actually written.
+        //! \return Either the number of bytes actually written or an error code.
+        //!
+        //! \see ResultCode
         [[nodiscard]] virtual Result<USize, ResultCode> WriteFromBuffer(const void* buffer, USize size) = 0;
 
         //! \brief Write to this stream from other stream.
         //!
-        //! \param [in] stream - Pointer to stream to write from.
-        //! \param [in] size   - Size in bytes of data to write.
+        //! \param stream - Pointer to stream to write from.
+        //! \param size - Size in bytes of data to write.
         //!
-        //! \return Number of bytes actually written.
+        //! \return Either the number of bytes actually written or an error code.
+        //!
+        //! \see ResultCode
         [[nodiscard]] virtual Result<USize, ResultCode> WriteFromStream(IStream* stream, USize size) = 0;
 
         //! \brief Get name of the stream.

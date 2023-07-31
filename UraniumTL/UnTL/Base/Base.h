@@ -91,8 +91,8 @@ namespace UN
 
     //! \brief Align up an integer.
     //!
-    //! \param [in] x     - Value to align.
-    //! \param [in] align - Alignment to use.
+    //! \param x     - Value to align.
+    //! \param align - Alignment to use.
     template<class T, class U = T>
     inline T AlignUp(T x, U align)
     {
@@ -101,8 +101,8 @@ namespace UN
 
     //! \brief Align up a pointer.
     //!
-    //! \param [in] x     - Value to align.
-    //! \param [in] align - Alignment to use.
+    //! \param x     - Value to align.
+    //! \param align - Alignment to use.
     template<class T>
     inline T* AlignUpPtr(const T* x, USize align)
     {
@@ -111,7 +111,7 @@ namespace UN
 
     //! \brief Align up an integer.
     //!
-    //! \param [in] x     - Value to align.
+    //! \param x     - Value to align.
     //! \tparam A         - Alignment to use.
     template<UInt32 A, class T>
     inline constexpr T AlignUp(T x)
@@ -121,8 +121,8 @@ namespace UN
 
     //! \brief Align down an integer.
     //!
-    //! \param [in] x     - Value to align.
-    //! \param [in] align - Alignment to use.
+    //! \param x     - Value to align.
+    //! \param align - Alignment to use.
     template<class T, class U = T>
     inline T AlignDown(T x, U align)
     {
@@ -131,8 +131,8 @@ namespace UN
 
     //! \brief Align down a pointer.
     //!
-    //! \param [in] x     - Value to align.
-    //! \param [in] align - Alignment to use.
+    //! \param x     - Value to align.
+    //! \param align - Alignment to use.
     template<class T>
     inline constexpr T* AlignDownPtr(const T* x, USize align)
     {
@@ -141,7 +141,7 @@ namespace UN
 
     //! \brief Align down an integer.
     //!
-    //! \param [in] x     - Value to align.
+    //! \param x     - Value to align.
     //! \tparam A         - Alignment to use.
     template<UInt32 A, class T>
     inline constexpr T AlignDown(T x)
@@ -151,8 +151,8 @@ namespace UN
 
     //! \brief Create a bitmask.
     //!
-    //! \param [in] bitCount  - The number of ones in the created mask.
-    //! \param [in] leftShift - The number of zeros to the right of the created mask.
+    //! \param bitCount  - The number of ones in the created mask.
+    //! \param leftShift - The number of zeros to the right of the created mask.
     template<class T>
     inline constexpr T MakeMask(T bitCount, T leftShift)
     {

@@ -3,6 +3,7 @@
 
 namespace UN::IO
 {
+    //! \brief A stream that writes to STDIO.
     class StdoutStream : public WStreamBase
     {
     public:
