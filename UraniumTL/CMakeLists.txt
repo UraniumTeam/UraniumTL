@@ -53,4 +53,6 @@ set_target_properties(UnTL PROPERTIES FOLDER "UraniumTL")
 get_property("TARGET_SOURCE_FILES" TARGET UnTL PROPERTY SOURCES)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${TARGET_SOURCE_FILES})
 
-add_subdirectory(Tests)
+if (UN_BUILD_TESTS)
+    add_subdirectory(Tests)
+endif ()
