@@ -141,9 +141,9 @@ namespace UN
             return Expect("Unwrap() called on error result");
         }
 
-        inline T Expect(const char* msg) const
+        inline T Expect([[maybe_unused]] const char* msg) const
         {
-            assert(IsOk() && msg);
+            UN_Assert(IsOk(), msg);
             return std::get<T>(m_Data);
         }
 
