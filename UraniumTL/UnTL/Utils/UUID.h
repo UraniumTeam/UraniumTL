@@ -28,7 +28,7 @@ namespace UN
         //! \brief Parse a UUID from a string in form `"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`.
         inline explicit UUID(const char* str) noexcept
         {
-            auto result = TryParse(str, *this, false);
+            [[maybe_unused]] auto result = TryParse(str, *this, false);
             UN_Assert(result, "Invalid format");
         }
 
