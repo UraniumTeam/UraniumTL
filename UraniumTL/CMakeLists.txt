@@ -3,6 +3,8 @@ set(SRC
     UnTL/Base/CompilerTraits.h
     UnTL/Base/Platform.h
     UnTL/Base/PlatformTraits.h
+    UnTL/Base/Byte.h
+    UnTL/Base/Flags.h
 
     UnTL/Buffers/ArrayPool.h
 
