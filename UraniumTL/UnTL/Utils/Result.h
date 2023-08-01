@@ -107,7 +107,7 @@ namespace UN
 
         inline TError ExpectErr(const char* msg) const
         {
-            assert(IsErr() && msg);
+            UN_Assert(IsErr(), msg);
             return std::get<TError>(m_Data);
         }
 

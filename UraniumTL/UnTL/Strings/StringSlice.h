@@ -319,7 +319,7 @@ namespace UN
                     return UTF8::PeekDecode(iter);
             }
 
-            assert(0);
+            UN_Unreachable("");
             return 0;
         }
 

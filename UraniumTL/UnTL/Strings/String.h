@@ -341,7 +341,7 @@ namespace UN
                 }
             }
 
-            UN_Assert(false, "Invalid index");
+            UN_Unreachable("Invalid index");
             return 0;
         }
 
