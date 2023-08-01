@@ -13,7 +13,7 @@ namespace UN
     //!
     //! \tparam T - Type of array element, must be trivially destructible.
     template<class T>
-    class ArrayPool final : Object<IObject>
+    class ArrayPool final : public Object<IObject>
     {
         inline static constexpr USize Alignment = std::max(static_cast<USize>(16), alignof(T));
 
