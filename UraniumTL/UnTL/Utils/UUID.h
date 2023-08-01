@@ -28,7 +28,8 @@ namespace UN
         //! \brief Parse a UUID from a string in form `"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"`.
         inline explicit UUID(const char* str) noexcept
         {
-            assert(TryParse(str, *this, false) && "Invalid format");
+            auto result = TryParse(str, *this, false);
+            UN_Assert(result, "Invalid format");
         }
 
         inline static bool TryParse(const char* str, UUID& result, bool assertLength = true)
