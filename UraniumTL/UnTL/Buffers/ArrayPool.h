@@ -21,11 +21,6 @@ namespace UN
 
         IAllocator* m_pAllocator;
 
-        inline explicit ArrayPool(IAllocator* pAllocator)
-            : m_pAllocator(pAllocator)
-        {
-        }
-
         // TODO: Implement actual array pool.
         //  The current implementation is very basic, it only allocates and deallocates
         //  the arrays without caching.
@@ -48,11 +43,9 @@ namespace UN
 
     public:
         //! \brief Create a default instance of ArrayPool<T>.
-        //!
-        //! \return The created instance.
-        [[nodiscard]] inline static ArrayPool Create() noexcept
+        inline explicit ArrayPool(IAllocator* pAllocator)
+            : m_pAllocator(pAllocator)
         {
-            return ArrayPool(SystemAllocator::Get());
         }
 
         //! \brief Retrieve an array with specified length.
