@@ -105,7 +105,7 @@ namespace UN
             return ExpectErr("UnwrapErr() called on OK result");
         }
 
-        inline TError ExpectErr(const char* msg) const
+        inline TError ExpectErr([[maybe_unused]] const char* msg) const
         {
             UN_Assert(IsErr(), msg);
             return std::get<TError>(m_Data);
