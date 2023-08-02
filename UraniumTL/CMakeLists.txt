@@ -6,6 +6,7 @@ set(SRC
     UnTL/Base/Byte.h
     UnTL/Base/Flags.h
 
+    UnTL/Buffers/Internal/PoolBucket.h
     UnTL/Buffers/ArrayPool.h
 
     UnTL/Containers/HeapArray.h
@@ -45,6 +46,7 @@ set(SRC
 
     UnTL/Utils/UUID.h
     UnTL/Utils/Result.h
+    UnTL/Utils/BitUtils.h
 )
 
 add_library(UnTL STATIC ${SRC})

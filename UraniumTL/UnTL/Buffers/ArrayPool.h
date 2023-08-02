@@ -1,6 +1,9 @@
 #pragma once
+#include <UnTL/Buffers/Internal/PoolBucket.h>
 #include <UnTL/Containers/ArraySlice.h>
+#include <UnTL/Containers/HeapArray.h>
 #include <UnTL/Containers/List.h>
+#include <UnTL/Utils/BitUtils.h>
 
 namespace UN
 {
@@ -12,26 +15,28 @@ namespace UN
     //! \note The class is thread-safe.
     //!
     //! \tparam T - Type of array element, must be trivially destructible.
-    template<class T>
+    template<class T, class TLock = std::mutex>
     class ArrayPool final : public Object<IObject>
     {
-        inline static constexpr USize Alignment = std::max(static_cast<USize>(16), alignof(T));
+        using PoolBucket = Internal::PoolBucket<T, TLock>;
+
+        inline static constexpr USize DefaultMaxArrayLength         = 1024 * 1024;
+        inline static constexpr USize DefaultMaxArrayCountPerBucket = 50;
 
         static_assert(std::is_trivially_destructible_v<T> && !std::is_const_v<T>);
 
+        ArraySlice<PoolBucket> m_Buckets;
         IAllocator* m_pAllocator;
 
-        // TODO: Implement actual array pool.
-        //  The current implementation is very basic, it only allocates and deallocates
-        //  the arrays without caching.
-
-        UN_FINLINE ArraySlice<T> AllocateStorage(USize count)
+        template<class TItem>
+        UN_FINLINE ArraySlice<TItem> AllocateStorage(USize length)
         {
-            void* pData = m_pAllocator->Allocate(count * sizeof(T), Alignment);
-            return ArraySlice<T>(static_cast<T*>(pData), count);
+            void* pData = m_pAllocator->Allocate(length * sizeof(TItem), alignof(TItem));
+            return ArraySlice<TItem>(static_cast<TItem*>(pData), length);
         }
 
-        UN_FINLINE void DeallocateStorage(const ArraySlice<T>& storage)
+        template<class TItem>
+        UN_FINLINE void DeallocateStorage(const ArraySlice<TItem>& storage)
         {
             if (storage.Empty())
             {
@@ -41,11 +46,54 @@ namespace UN
             m_pAllocator->Deallocate(storage.Data());
         }
 
+        inline UInt32 Log2(UInt32 x)
+        {
+            return 31 ^ Bits::CountLeadingZeros(x | 1);
+        }
+
+        inline USize SelectBucketIndex(USize bufferSize)
+        {
+            return Log2(static_cast<UInt32>(bufferSize) - 1 | 15) - 3;
+        }
+
+        inline USize GetMaxSizeForBucket(int binIndex)
+        {
+            return 16 << binIndex;
+        }
+
     public:
         //! \brief Create a default instance of ArrayPool<T>.
         inline explicit ArrayPool(IAllocator* pAllocator)
+            : ArrayPool(pAllocator, DefaultMaxArrayLength, DefaultMaxArrayCountPerBucket)
+        {
+        }
+
+        //! \brief Create a default instance of ArrayPool<T>.
+        inline explicit ArrayPool(IAllocator* pAllocator, USize maxArrayLength, USize maxArrayCountPerBucket)
             : m_pAllocator(pAllocator)
         {
+            const auto MinimumArrayLength = 0x10, MaximumArrayLength = 0x40000000;
+            if (maxArrayLength > MaximumArrayLength)
+            {
+                maxArrayLength = MaximumArrayLength;
+            }
+            else if (maxArrayLength < MinimumArrayLength)
+            {
+                maxArrayLength = MinimumArrayLength;
+            }
+
+            auto maxBuckets = SelectBucketIndex(maxArrayLength);
+            m_Buckets       = AllocateStorage<PoolBucket>(maxBuckets + 1);
+            for (int i = 0; i < maxBuckets + 1; ++i)
+            {
+                new (&m_Buckets[i]) PoolBucket(pAllocator, GetMaxSizeForBucket(i), maxArrayCountPerBucket);
+            }
+        }
+
+        ~ArrayPool() override
+        {
+            DeallocateStorage(m_Buckets);
+            m_Buckets = {};
         }
 
         //! \brief Retrieve an array with specified length.
@@ -59,10 +107,37 @@ namespace UN
         //! return an array with garbage data.
         //!
         //! \param length - The length of the array to retrieve.
+        //!
         //! \return The rented array.
         [[nodiscard]] inline ArraySlice<T> Rent(USize length) noexcept
         {
-            return AllocateStorage(length);
+            UN_Assert(length >= 0, "Length must be non-negative");
+            if (length == 0)
+            {
+                return {};
+            }
+
+            ArraySlice<T> buffer;
+            auto index = SelectBucketIndex(length);
+            if (index < m_Buckets.Length())
+            {
+                const auto MaxBucketsToTry = 2;
+
+                auto i = index;
+                do
+                {
+                    buffer = m_Buckets[i].Rent();
+                    if (buffer.Any())
+                    {
+                        return buffer;
+                    }
+                }
+                while (++i < m_Buckets.Length() && i != index + MaxBucketsToTry);
+
+                return m_Buckets[index].AllocateStorage();
+            }
+
+            return AllocateStorage<T>(length);
         }
 
         //! \brief Return a previously rented array.
@@ -75,7 +150,22 @@ namespace UN
         //! \param array - The array previously rented from the pool to return.
         inline void Return(const ArraySlice<T>& array) noexcept
         {
-            DeallocateStorage(array);
+            if (array.Empty())
+            {
+                return;
+            }
+
+            auto bucket     = SelectBucketIndex(array.Length());
+            auto haveBucket = bucket < m_Buckets.Length();
+
+            if (haveBucket)
+            {
+                m_Buckets[bucket].Return(array);
+            }
+            else
+            {
+                DeallocateStorage(array);
+            }
         }
     };
 } // namespace UN

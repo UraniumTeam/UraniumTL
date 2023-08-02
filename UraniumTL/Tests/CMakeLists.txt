@@ -1,7 +1,7 @@
 set(SRC
     Common/Common.h
 
-    Test.cpp
+    ArrayPoolTests.cpp
     main.cpp
 )
 
