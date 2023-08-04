@@ -38,6 +38,9 @@ namespace UN::Fmt
         }
     };
 
+    void FormatIntegral(String& buffer, UInt64 value);
+    void FormatIntegral(String& buffer, Int64 value);
+
     template<class T>
     struct ValueFormatter : BasicValueFormatter<T>
     {
@@ -48,6 +51,16 @@ namespace UN::Fmt
             {
                 ss << "0x" << std::hex << reinterpret_cast<USize>(value);
             }
+            else if constexpr (std::is_signed_v<T>)
+            {
+                FormatIntegral(buffer, static_cast<Int64>(value));
+                return;
+            }
+            else if constexpr (std::is_unsigned_v<T>)
+            {
+                FormatIntegral(buffer, static_cast<UInt64>(value));
+                return;
+            }
             else
             {
                 ss << value;
@@ -56,6 +69,18 @@ namespace UN::Fmt
             auto v = ss.str();
             buffer.Append(v.data(), v.size());
         }
+    };
+
+    template<>
+    struct ValueFormatter<Float32> : BasicValueFormatter<Float32>
+    {
+        void Format(String& buffer, const Float32& value) const override;
+    };
+
+    template<>
+    struct ValueFormatter<Float64> : BasicValueFormatter<Float64>
+    {
+        void Format(String& buffer, const Float64& value) const override;
     };
 
     template<>

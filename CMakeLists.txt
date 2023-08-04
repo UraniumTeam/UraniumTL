@@ -12,6 +12,7 @@ list(PREPEND CMAKE_MODULE_PATH "${UN_PROJECT_ROOT}/cmake")
 
 include(Config)
 include(ThirdParty/get_cpm)
+include(ThirdParty/dragonbox)
 
 if (UN_BUILD_TESTS)
     include(ThirdParty/gtest)

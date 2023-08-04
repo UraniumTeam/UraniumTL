@@ -235,7 +235,7 @@ namespace UN
         template<class TDest>
         inline std::enable_if_t<std::is_base_of_v<T, TDest> && !std::is_same_v<T, TDest>, TDest*> As() const
         {
-            return un_verify_cast<TDest*>(Get());
+            return un_assert_cast<TDest*>(Get());
         }
 
         inline Internal::PtrRef<Ptr<T>> operator&() // NOLINT
@@ -330,8 +330,8 @@ namespace UN
     }
 
     template<class TDest, class TSrc>
-    inline std::enable_if_t<std::is_base_of_v<TSrc, TDest>, Ptr<TDest>> un_verify_cast(const Ptr<TSrc>& pSourceObject)
+    inline std::enable_if_t<std::is_base_of_v<TSrc, TDest>, Ptr<TDest>> un_assert_cast(const Ptr<TSrc>& pSourceObject)
     {
-        return Ptr<TDest>(un_verify_cast<TDest*>(pSourceObject.Get()));
+        return Ptr<TDest>(un_assert_cast<TDest*>(pSourceObject.Get()));
     }
 } // namespace UN

@@ -35,6 +35,7 @@ set(SRC
 
     UnTL/Strings/Format.h
     UnTL/Strings/Format.cpp
+    UnTL/Strings/Internal/jeaiii_to_text.h
     UnTL/Strings/String.h
     UnTL/Strings/StringSlice.h
     UnTL/Strings/StringSlice.cpp
@@ -58,6 +59,7 @@ un_enable_simd_for_target(UnTL)
 target_include_directories(UnTL PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 set_target_properties(UnTL PROPERTIES FOLDER "UraniumTL")
+target_link_libraries(UnTL dragonbox::dragonbox_to_chars)
 
 get_property("TARGET_SOURCE_FILES" TARGET UnTL PROPERTY SOURCES)
 source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" FILES ${TARGET_SOURCE_FILES})
