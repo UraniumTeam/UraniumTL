@@ -1,8 +1,13 @@
 set(SRC
     Common/Common.h
-
-    ArrayPoolTests.cpp
     main.cpp
+
+    Buffers/ArrayPool.cpp
+    Utils/UUID.cpp
+    Containers/List.cpp
+    RTTI/RTTI.cpp
+    Strings/Format.cpp
+    Strings/String.cpp
 )
 
 add_executable(UnTLTests ${SRC})

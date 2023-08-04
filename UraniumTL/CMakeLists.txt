@@ -47,11 +47,13 @@ set(SRC
     UnTL/Utils/UUID.h
     UnTL/Utils/Result.h
     UnTL/Utils/BitUtils.h
+    UnTL/Utils/UUID.cpp
 )
 
 add_library(UnTL STATIC ${SRC})
 
 un_configure_target(UnTL)
+un_enable_simd_for_target(UnTL)
 
 target_include_directories(UnTL PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
