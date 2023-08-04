@@ -2,26 +2,44 @@
 #include <UnTL/Base/Base.h>
 #include <array>
 #include <cctype>
-#include <string_view>
 #include <ostream>
+#include <random>
+#include <string_view>
 
 namespace UN
 {
+    namespace Internal
+    {
+        inline constexpr USize UUIDStringLength = 36;
+
+#if UN_SSE41_SUPPORTED && UN_AVX2_SUPPORTED
+        void m128itos(__m128i x, char* mem);
+#endif
+        __m128i m128gen(std::mt19937_64& generator);
+    } // namespace Internal
+
     //! \brief A struct to work with UUIDs.
-    struct alignas(8) UUID
+    struct alignas(__m128i) UUID
     {
         std::array<UInt8, 16> Data{};
 
         inline UUID() = default;
 
+        inline explicit UUID(__m128i value) noexcept
+        {
+            _mm_store_si128(reinterpret_cast<__m128i*>(Data.data()), value);
+        }
+
         inline UUID(const UUID& other) noexcept
         {
-            memcpy(Data.data(), other.Data.data(), 16);
+            __m128i value = _mm_load_si128(reinterpret_cast<const __m128i*>(other.Data.data()));
+            _mm_store_si128(reinterpret_cast<__m128i*>(Data.data()), value);
         }
 
         inline UUID& operator=(const UUID& other) noexcept
         {
-            memcpy(Data.data(), other.Data.data(), 16);
+            __m128i value = _mm_load_si128(reinterpret_cast<const __m128i*>(other.Data.data()));
+            _mm_store_si128(reinterpret_cast<__m128i*>(Data.data()), value);
             return *this;
         }
 
@@ -30,6 +48,21 @@ namespace UN
         {
             [[maybe_unused]] auto result = TryParse(str, *this, false);
             UN_Assert(result, "Invalid format");
+        }
+
+        inline static UUID Create()
+        {
+            std::random_device device;
+            std::mt19937_64 generator(device());
+            __m128i value = Internal::m128gen(generator);
+            return UUID(value);
+        }
+
+        inline static UUID Create(UInt64 seed)
+        {
+            std::mt19937_64 generator(seed);
+            __m128i value = Internal::m128gen(generator);
+            return UUID(value);
         }
 
         inline static bool TryParse(const char* str, UUID& result, bool assertLength = true)
@@ -76,12 +109,17 @@ namespace UN
             return true;
         }
 
-        inline std::string ToString() const
+        [[nodiscard]] inline std::string ToString() const
         {
             std::string buffer;
+
+#if UN_SSE41_SUPPORTED && UN_AVX2_SUPPORTED
+            buffer.resize(Internal::UUIDStringLength);
+            Internal::m128itos(_mm_load_si128(reinterpret_cast<const __m128i*>(Data.data())), buffer.data());
+#else
             static char digits[] = "0123456789ABCDEF";
             Int32 idx            = 0;
-            buffer.reserve(36);
+            buffer.reserve(Internal::UUIDStringLength);
             auto append = [&](UInt32 n) {
                 for (UInt32 i = 0; i < n; ++i)
                 {
@@ -100,6 +138,7 @@ namespace UN
             append(2);
             buffer.push_back('-');
             append(6);
+#endif
 
             return buffer;
         }
