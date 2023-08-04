@@ -92,6 +92,7 @@ namespace UN
 
         ~ArrayPool() override
         {
+            std::destroy(m_Buckets.begin(), m_Buckets.end());
             DeallocateStorage(m_Buckets);
             m_Buckets = {};
         }
