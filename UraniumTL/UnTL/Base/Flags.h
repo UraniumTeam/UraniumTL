@@ -13,6 +13,13 @@ namespace UN
         return static_cast<std::underlying_type_t<TEnum>>(value);
     }
 
+    //! \brief Cast an enum to flags type.
+    template<class TFlagsEnum, class TEnum>
+    inline constexpr std::enable_if_t<std::is_enum_v<TEnum>, TFlagsEnum> un_flag_cast(TEnum value)
+    {
+        return static_cast<TFlagsEnum>(1 << un_enum_cast(value));
+    }
+
 //! \brief Define bitwise operations on `enum`.
 //!
 //! The macro defines bitwise or, and, xor operators.
