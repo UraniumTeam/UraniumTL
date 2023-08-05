@@ -50,24 +50,23 @@ namespace UN::Fmt
             if constexpr (std::is_pointer_v<T> && !std::is_same_v<T, const char*>)
             {
                 ss << "0x" << std::hex << reinterpret_cast<USize>(value);
+                auto v = ss.str();
+                buffer.Append(v.data(), v.size());
             }
             else if constexpr (std::is_signed_v<T>)
             {
                 FormatIntegral(buffer, static_cast<Int64>(value));
-                return;
             }
             else if constexpr (std::is_unsigned_v<T>)
             {
                 FormatIntegral(buffer, static_cast<UInt64>(value));
-                return;
             }
             else
             {
                 ss << value;
+                auto v = ss.str();
+                buffer.Append(v.data(), v.size());
             }
-
-            auto v = ss.str();
-            buffer.Append(v.data(), v.size());
         }
     };
 
