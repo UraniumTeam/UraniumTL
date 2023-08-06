@@ -57,7 +57,7 @@ namespace UN
         return ::UN::TypeName<name>();                                                                                           \
     }                                                                                                                            \
                                                                                                                                  \
-    inline virtual ::UN::TypeID UnRTTI_GetID() const                                                                             \
+    inline virtual const ::UN::TypeID& UnRTTI_GetID() const                                                                      \
     {                                                                                                                            \
         return name ::UnRTTI_GetSID();                                                                                           \
     }                                                                                                                            \
