@@ -1,8 +1,20 @@
+#include <Tests/Common/Common.h>
 #include <UnTL/Containers/List.h>
 #include <UnTL/Strings/String.h>
-#include <Tests/Common/Common.h>
 
 using UN::List;
+
+class NoCopy final
+{
+    NoCopy(const NoCopy&)            = delete;
+    NoCopy& operator=(const NoCopy&) = delete;
+
+public:
+    inline NoCopy() = default;
+
+    NoCopy(NoCopy&&)            = default;
+    NoCopy& operator=(NoCopy&&) = default;
+};
 
 TEST(List, ConstructDestructObject)
 {
@@ -152,6 +164,13 @@ TEST(List, MoveObject)
     lst.Push(std::move(s));
     EXPECT_TRUE(s.Empty());
     EXPECT_EQ(lst.Pop(), "123");
+}
+
+TEST(List, NoCopySupport)
+{
+    List<NoCopy> lst;
+    lst.Emplace();
+    lst.Push(NoCopy{});
 }
 
 TEST(List, Remove)
