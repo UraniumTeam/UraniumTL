@@ -111,6 +111,11 @@ namespace UN
         //! \return The created subslice.
         inline ArraySlice operator()(USize beginIndex, USize endIndex) const
         {
+            if (beginIndex == endIndex)
+            {
+                return ArraySlice{};
+            }
+
             UN_Assert(beginIndex < Length() && endIndex <= Length(), "Index out of range");
             return ArraySlice(m_pBegin + beginIndex, m_pBegin + endIndex);
         }
@@ -122,6 +127,11 @@ namespace UN
         //! \return The created subslice.
         inline ArraySlice operator()(USize beginIndex) const
         {
+            if (beginIndex == Length())
+            {
+                return ArraySlice{};
+            }
+
             UN_Assert(beginIndex < Length(), "Index out of range");
             return ArraySlice(m_pBegin + beginIndex, m_pEnd);
         }
