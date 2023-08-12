@@ -167,7 +167,7 @@ namespace UN
         //! \param value - The value to look for.
         [[nodiscard]] inline bool Contains(const T& value) const noexcept
         {
-            return IndexOf(value) != -1;
+            return FindFirstOf(value) != -1;
         }
 
         //! \brief Length of the slice.
