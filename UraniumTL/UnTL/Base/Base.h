@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <intrin.h>
 #include <string_view>
+#include <memory>
 
 namespace UN
 {
@@ -193,8 +194,14 @@ namespace UN
         };                                                                                                                       \
     }
 
+#if __cpp_lib_assume_aligned
+#    define UN_AssumeAligned(align, value) std::assume_aligned<align>(value)
+#else
+#    define UN_AssumeAligned(align, value) (value)
+#endif
+
 #ifndef UN_Assert
-#define UN_Assert(expr, msg) assert((expr) && (msg))
+#    define UN_Assert(expr, msg) assert((expr) && (msg))
 #endif
 
 #define UN_Unreachable(msg) UN_Assert(false, msg)

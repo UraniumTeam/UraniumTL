@@ -25,9 +25,11 @@ namespace UN
         inline void AllocateStorage(USize count, const T& value)
         {
             AllocateStorage(count);
+
+            auto* storage = UN_AssumeAligned(Alignment, m_Storage.Data());
             for (USize i = 0; i < count; ++i)
             {
-                m_Storage[i] = value;
+                storage[i] = value;
             }
         }
 
@@ -256,14 +258,35 @@ namespace UN
             return HeapArray<T>(arraySlice);
         }
 
+        //! \brief Create an uninitialized heap array.
+        //!
+        //! \param pAllocator - The allocator to use for heap allocations.
+        //! \param size       - The number of array elements.
+        [[nodiscard]] inline static HeapArray<T> CreateUninitialized(IAllocator* pAllocator, USize size)
+        {
+            HeapArray<T> result(pAllocator);
+            result.AllocateStorage(size);
+            return result;
+        }
+
+        //! \brief Create an uninitialized heap array.
+        //!
+        //! \param size - The number of array elements.
+        [[nodiscard]] inline static HeapArray<T> CreateUninitialized(USize size)
+        {
+            HeapArray<T> result(SystemAllocator::Get());
+            result.AllocateStorage(size);
+            return result;
+        }
+
         [[nodiscard]] inline const T* begin() const
         {
-            return m_Storage.begin();
+            return UN_AssumeAligned(Alignment, m_Storage.begin());
         }
 
         [[nodiscard]] inline const T* end() const
         {
-            return m_Storage.end();
+            return UN_AssumeAligned(Alignment, m_Storage.end());
         }
 
         inline operator ArraySlice<const T>() const // NOLINT(google-explicit-constructor)
