@@ -115,6 +115,17 @@ namespace UN
             return ArraySlice(m_pBegin + beginIndex, m_pBegin + endIndex);
         }
 
+        //! \brief Create a subslice from this array slice.
+        //!
+        //! \param beginIndex - The index of the first element.
+        //!
+        //! \return The created subslice.
+        inline ArraySlice operator()(USize beginIndex) const
+        {
+            UN_Assert(beginIndex < Length(), "Index out of range");
+            return ArraySlice(m_pBegin + beginIndex, m_pEnd);
+        }
+
         //! \brief Get an element by index.
         //!
         //! \param index - The index of the element to get.
