@@ -145,6 +145,46 @@ namespace UN
             return m_pBegin[index];
         }
 
+        //! \brief Get index of the first element that satisfies the predicate.
+        //!
+        //! \param f - The predicate to check.
+        //!
+        //! \return The index of the value or -1.
+        template<class TFunc>
+        [[nodiscard]] inline SSize FindFirstOfPredicate(TFunc&& f) const noexcept
+        {
+            auto length = static_cast<SSize>(Length());
+            for (SSize i = 0; i < length; ++i)
+            {
+                if (f(m_pBegin[i]))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        //! \brief Get index of the last element equal that satisfies the predicate.
+        //!
+        //! \param f - The predicate to check.
+        //!
+        //! \return The index of the value or -1.
+        template<class TFunc>
+        [[nodiscard]] inline SSize FindLastOfPredicate(TFunc&& f) const noexcept
+        {
+            auto length = static_cast<SSize>(Length());
+            for (SSize i = length - 1; i >= 0; --i)
+            {
+                if (f(m_pBegin[i]))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         //! \brief Get index of the first element equal to the passed value.
         //!
         //! \param value - The value to look for.
@@ -152,16 +192,9 @@ namespace UN
         //! \return The index of the value or -1.
         [[nodiscard]] inline SSize FindFirstOf(const T& value) const noexcept
         {
-            auto length = static_cast<SSize>(Length());
-            for (SSize i = 0; i < length; ++i)
-            {
-                if (value == m_pBegin[i])
-                {
-                    return i;
-                }
-            }
-
-            return -1;
+            return FindFirstOfPredicate([&value](const auto& x) {
+                return x == value;
+            });
         }
 
         //! \brief Get index of the last element equal to the passed value.
@@ -171,16 +204,35 @@ namespace UN
         //! \return The index of the value or -1.
         [[nodiscard]] inline SSize FindLastOf(const T& value) const noexcept
         {
-            auto length = static_cast<SSize>(Length());
-            for (SSize i = length - 1; i >= 0; --i)
-            {
-                if (value == m_pBegin[i])
-                {
-                    return i;
-                }
-            }
+            return FindLastOfPredicate([&value](const auto& x) {
+                return x == value;
+            });
+        }
 
-            return -1;
+        //! \brief Get index of the first element equal to one of the passed values.
+        //!
+        //! \param values - The value to look for.
+        //!
+        //! \return The index of the value or -1.
+        template<class... TArgs>
+        [[nodiscard]] inline SSize FindFirstOfAny(const TArgs&... values) const noexcept
+        {
+            return FindFirstOfPredicate([&](const auto& x) {
+                return (... || (x == values));
+            });
+        }
+
+        //! \brief Get index of the last element equal to one of the passed values.
+        //!
+        //! \param values - The value to look for.
+        //!
+        //! \return The index of the value or -1.
+        template<class... TArgs>
+        [[nodiscard]] inline SSize FindLastOfAny(const TArgs&... values) const noexcept
+        {
+            return FindLastOfPredicate([&](const auto& x) {
+                return (... || (x == values));
+            });
         }
 
         //! \brief Check if the element is present in the slice.
