@@ -331,4 +331,9 @@ namespace UN
             return lhs.m_pBegin != rhs.m_pBegin || lhs.m_pEnd != rhs.m_pEnd;
         }
     };
+    
+#define UN_AllocateOnStack(type, size) ::UN::ArraySlice<type>(static_cast<type*>(alloca(size)), size)
+#define UN_AllocateOnStackOrPool(type, size, threshold, pool, ownedArray)                                                        \
+    size > threshold;                                                                                                            \
+    auto ownedArray = size > threshold ? pool->Rent(size) : UN_AllocateOnStack(type, size)
 } // namespace UN
