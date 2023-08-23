@@ -1,5 +1,6 @@
 #include <UnTL/RTTI/RTTI.h>
 #include <gtest/gtest.h>
+#include <string_view>
 
 using namespace UN;
 
@@ -24,7 +25,7 @@ public:
 TEST(RTTI, TypeName)
 {
     Foo foo;
-    auto expectedName = "class Foo";
+    std::string_view expectedName = "class Foo";
     ASSERT_EQ(foo.UnRTTI_GetName(), expectedName);
     ASSERT_EQ(Foo::UnRTTI_GetSName(), expectedName);
 }
