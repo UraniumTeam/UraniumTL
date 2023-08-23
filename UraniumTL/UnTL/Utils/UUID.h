@@ -5,6 +5,7 @@
 #include <ostream>
 #include <random>
 #include <string_view>
+#include <algorithm>
 
 namespace UN
 {

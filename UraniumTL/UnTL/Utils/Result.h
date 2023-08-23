@@ -150,16 +150,12 @@ namespace UN
         template<class F>
         inline T UnwrapOrElse(F&& f) const&
         {
-            using ResultType = Result<T, TError>;
-
             return IsOk() ? std::get<T>(m_Data) : std::invoke(std::forward<F>(f), std::get<TError>(m_Data));
         }
 
         template<class F>
         inline T UnwrapOrElse(F&& f) &&
         {
-            using ResultType = Result<T, TError>;
-
             return IsOk() ? std::get<T>(m_Data)
                           : std::invoke(std::forward<F>(f), static_cast<TError&&>(std::get<TError>(m_Data)));
         }

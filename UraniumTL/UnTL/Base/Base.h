@@ -3,9 +3,11 @@
 #include <atomic>
 #include <cassert>
 #include <cstdint>
-#include <intrin.h>
+#include <cstring>
 #include <string_view>
 #include <memory>
+#include <xmmintrin.h>
+#include <emmintrin.h>
 
 namespace UN
 {

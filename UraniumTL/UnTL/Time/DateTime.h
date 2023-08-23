@@ -68,14 +68,22 @@ namespace UN
         inline static DateTime CreateLocal(time_t time)
         {
             tm data;
-            localtime_s(&data, &time);
+#if UN_WINDOWS
+            ::localtime_s(&data, &time);
+#else
+            ::localtime_r(&time, &data);
+#endif
             return DateTime(data);
         }
 
         inline static DateTime CreateUtc(time_t time)
         {
             tm data;
-            gmtime_s(&data, &time);
+#if UN_WINDOWS
+            ::gmtime_s(&data, &time);
+#else
+            ::gmtime_r(&time, &data);
+#endif
             return DateTime(data);
         }
 

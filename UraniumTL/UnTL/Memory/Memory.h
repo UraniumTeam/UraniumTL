@@ -52,7 +52,7 @@ namespace UN
 
     //! \brief A wrapper for IAllocator compatible with `std::allocator`.
     template<class T, class TAlloc>
-    class StdAllocator final
+    class StdAllocator
     {
         mutable IAllocator* m_Instance;
 

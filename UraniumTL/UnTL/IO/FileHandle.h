@@ -7,7 +7,7 @@ namespace UN::IO
 {
     namespace Internal
     {
-        inline ResultCode GetResultCode(errno_t err)
+        inline ResultCode GetResultCode(int err)
         {
             switch (err)
             {

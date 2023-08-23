@@ -1,12 +1,14 @@
 #include <UnTL/IO/FileHandle.h>
+#include <unistd.h>
 
 #if UN_WINDOWS
 #    include <direct.h>
 #    define UN_SEEK_64 _fseeki64
 #    define UN_TELL_64 _ftelli64
 #else
+#    include <sys/stat.h>
 #    define UN_SEEK_64 fseek
-#    define UN_SEEK_64 ftell
+#    define UN_TELL_64 ftell
 #endif
 
 namespace UN::IO
@@ -202,7 +204,7 @@ namespace UN::IO
 #if UN_WINDOWS
         _getcwd(buffer, sizeof(buffer));
 #else
-#    error Unsupported platform
+        getcwd(buffer, sizeof(buffer));
 #endif
         return buffer;
     }
