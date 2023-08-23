@@ -84,7 +84,7 @@ namespace UN
 
             auto maxBuckets = SelectBucketIndex(maxArrayLength);
             m_Buckets       = AllocateStorage<PoolBucket>(maxBuckets + 1);
-            for (int i = 0; i < maxBuckets + 1; ++i)
+            for (USize i = 0; i < maxBuckets + 1; ++i)
             {
                 new (&m_Buckets[i]) PoolBucket(pAllocator, GetMaxSizeForBucket(i), maxArrayCountPerBucket);
             }
