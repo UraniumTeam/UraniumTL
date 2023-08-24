@@ -56,9 +56,9 @@ namespace UN
             return Log2(static_cast<UInt32>(bufferSize) - 1 | 15) - 3;
         }
 
-        inline USize GetMaxSizeForBucket(int binIndex)
+        inline USize GetMaxSizeForBucket(USize binIndex)
         {
-            return 16 << binIndex;
+            return 16 << static_cast<Int32>(binIndex);
         }
 
     public:
