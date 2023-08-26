@@ -99,7 +99,7 @@ namespace UN
             {
                 for (USize i = 0; i < count; ++i)
                 {
-                    new (&dest[i]) T(std::move(src[i]));
+                    new (dest + i) T(std::move(src[i]));
                 }
             }
         }
