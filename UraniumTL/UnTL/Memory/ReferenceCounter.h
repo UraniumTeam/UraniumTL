@@ -78,13 +78,14 @@ namespace UN
         template<class F>
         inline UInt32 ReleaseStrongRef(F&& destroyCallback)
         {
-            if (--m_StrongRefCount == 0)
+            UInt32 refCount = --m_StrongRefCount; 
+            if (refCount == 0)
             {
                 destroyCallback();
                 m_pAllocator->Deallocate(this);
             }
 
-            return m_StrongRefCount;
+            return refCount;
         }
 
         //! \brief Get number of strong references.
